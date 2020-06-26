@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Food Database{% endblock %}
+{% block body %}
+<h2>食品データベース</h2>
+<form action="{% url 'food:database' %}" method="post">
+	<div class="row">
+      {% for field in form %}
+        <div class="form-group">
+          {% if field.errors %}
+            <div class="col-sm-10">
+              <span class="col-sm-10">{{ field.errors }}</span>
+            </div>
+          {% endif %}
+          <div class="col-sm-10">
+            <label class="col-sm-3 control-label">{{ field.label_tag }}</label>
+            <label class="label col-sm-7">{{ field }}</label>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="col-sm-10">
+        <div class="form-group">
+          <label class="col-sm-2 control-label"><input type="submit" class="btn btn-primary" value="登録"></label>
+          {% csrf_token %}
+        </div>
+      </div>
+    </div>
+</form>
+
+<form method="post" action="{% url 'food:delete' %}">{# actionを変更する #}
+  <table border="1">
+    <thead>
+        <tr>
+          <th>　</th>
+          <th>id</th>
+          <th>name</th>
+          <th>money</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for food in foods %}
+          <tr>
+            <td><input type="checkbox" name="delete_ids" value="{{ food.id }}"></td>
+            <td>{{ food.id }}</td>
+            <td>{{ food.name }}</td>
+            <td>{{ food.money }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+</table>
+{% csrf_token %}
+<input type="submit" value="削除">
+</form>
+{% endblock %}
+
